@@ -23,20 +23,23 @@ namespace Clients.BLL.Service
         {
             var result = await _messagesRepository.GetMessagesByDateRange(range.startDate, range.endDate);
 
-
-
             if (result == null)
             {
                 return null;
             }
+
             List<Message> messages = new List<Message>();
+
             foreach (var message in result)
             {
                 messages.Add(new Message()
                 {
-                    I
-                })
+                    Text = message.Text,
+                    DateTime = message.DateTime
+                });
             }
+
+            return messages;
         }
 
         public async Task<bool> SendMessage(string message)

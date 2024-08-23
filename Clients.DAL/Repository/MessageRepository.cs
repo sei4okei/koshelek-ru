@@ -31,8 +31,8 @@ namespace Clients.DAL.Repository
         {
             using (HttpClient client = new HttpClient())
             {
-                //var response = await client.PostAsync(_url + "add" + "?text=" + message.Text);
-                var response = await client.PostAsJsonAsync(_url + "add", message);
+                var response = await client.PostAsJsonAsync(_url + "add", message.Text);
+                //var response = await client.PostAsJsonAsync(_url + "add", message);
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {

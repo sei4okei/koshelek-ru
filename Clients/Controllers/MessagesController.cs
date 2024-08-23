@@ -1,3 +1,5 @@
+using Clients.BLL.Interface;
+using Clients.DAL.Model;
 using Clients.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,10 +9,12 @@ namespace Clients.Controllers
     public class MessagesController : Controller
     {
         private readonly ILogger<MessagesController> _logger;
+        private readonly IMessagesService _messagesService;
 
-        public MessagesController(ILogger<MessagesController> logger)
+        public MessagesController(ILogger<MessagesController> logger, IMessagesService messagesService)
         {
             _logger = logger;
+            _messagesService = messagesService;
         }
 
         public IActionResult Index()
@@ -21,13 +25,17 @@ namespace Clients.Controllers
         [HttpGet]
         public IActionResult AddMessage()
         {
-            return View();
+            var message = new Request();
+
+            return View(message);
         }
 
         [HttpPost]
-        public IActionResult AddMessage(string message)
+        public async Task<IActionResult> AddMessage(Request message)
         {
+            var result = await _messagesService.SendMessage(message.Text);
 
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

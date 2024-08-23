@@ -1,6 +1,7 @@
 using DataAccessLayer.Interface;
 using DataAccessLayer.Model;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.DAL.Model;
 
 namespace WebAPI.Controllers
 {
@@ -18,7 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult AddMessage([FromQuery] string text)
+        public IActionResult AddMessage([FromBody] string text)
         {
             bool isAdded = _messageRepository.AddMessage(new Message()
             {
@@ -35,9 +36,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("range")]
-        public ActionResult<List<Message>> GetMessagesByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public ActionResult<List<Message>> GetMessagesByDateRange([FromBody] DateRange dateRange)
         {
-            var messages = _messageRepository.GetMessagesByDateRange(startDate, endDate);
+            var messages = _messageRepository.GetMessagesByDateRange(dateRange.startDate, dateRange.endDate);
 
             if (messages.Count > 0)
             {

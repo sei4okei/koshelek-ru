@@ -9,7 +9,7 @@ namespace Clients.BLL.Interface
 {
     public interface IMessagesService
     {
-        public bool SendMessage(string message);
+        public Task<bool> SendMessage(string message);
         public Task<List<Message>> GetMessagesByDateRange(DateRange range);
     }
 }
