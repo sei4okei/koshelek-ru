@@ -1,5 +1,6 @@
 using Clients.BLL.Interface;
 using Clients.BLL.Service;
+using Clients.DAL.Hub;
 using Clients.DAL.Interface;
 using Clients.DAL.Repository;
 
@@ -13,16 +14,19 @@ namespace Clients
 
             builder.Services.AddScoped<IMessagesRepository, MessageRepository>();
             builder.Services.AddScoped<IMessagesService, MessagesService>();
+            builder.Services.AddSignalR();
 
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.UseWebSockets();
+
+            app.MapHub<MessageHub>("/messageHub");
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Messages/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

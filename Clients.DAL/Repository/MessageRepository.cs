@@ -1,12 +1,20 @@
 ﻿using Clients.DAL.Interface;
 using Clients.DAL.Model;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.SignalR;
+using Clients.DAL.Hub;
 
 namespace Clients.DAL.Repository
 {
     public class MessageRepository : IMessagesRepository
     {
         private readonly string _url = "http://localhost:5095/Message/";
+        private readonly IHubContext<MessageHub> _hubContext;
+
+        public MessageRepository(IHubContext<MessageHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
 
         public async Task<List<Response>> GetMessagesByDateRange(DateTime startDate, DateTime endDate)
         {
@@ -32,15 +40,18 @@ namespace Clients.DAL.Repository
             using (HttpClient client = new HttpClient())
             {
                 var response = await client.PostAsJsonAsync(_url + "add", message.Text);
-                //var response = await client.PostAsJsonAsync(_url + "add", message);
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
-                    return response.Content.ReadAsStringAsync().Result
-                        == "Message added successfully." ? true : false;
+                    // Асинхронно отправляем сообщение через SignalR
+                    await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.Text);
+
+                    string result = await response.Content.ReadAsStringAsync();
+                    return result == "Message added successfully.";
                 }
                 return false;
             }
         }
+
     }
 }

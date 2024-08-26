@@ -38,6 +38,12 @@ namespace Clients.Controllers
             return View();
         }
 
+        [HttpGet("messages")]
+        public IActionResult WebSocketMessages()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
