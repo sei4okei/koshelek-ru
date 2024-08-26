@@ -16,24 +16,26 @@ namespace Clients.DAL.Repository
             _hubContext = hubContext;
         }
 
-        public async Task<List<Response>> GetMessagesByDateRange(DateTime startDate, DateTime endDate)
+        public async Task<List<Response>> GetMessagesByDateRange(DateRange range)
         {
             List<Response> messages = new List<Response>();
 
             using (HttpClient client = new HttpClient())
             {
-                var response = await client.GetAsync(_url + "range" + "?startDate=" + startDate + "&endDate=" + endDate);
+
+                var response = await client.PostAsJsonAsync(_url + "range", range);
                 response.EnsureSuccessStatusCode();
+
                 if (response.IsSuccessStatusCode)
                 {
                     messages = await response.Content.ReadFromJsonAsync<List<Response>>();
-
                     return messages;
                 }
 
                 return null;
             }
         }
+
 
         public async Task<bool> PostMessage(Request message)
         {
@@ -43,7 +45,6 @@ namespace Clients.DAL.Repository
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
-                    // Асинхронно отправляем сообщение через SignalR
                     await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.Text);
 
                     string result = await response.Content.ReadAsStringAsync();

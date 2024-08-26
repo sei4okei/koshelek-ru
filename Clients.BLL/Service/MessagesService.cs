@@ -21,7 +21,7 @@ namespace Clients.BLL.Service
 
         public async Task<List<Message>> GetMessagesByDateRange(DateRange range)
         {
-            var result = await _messagesRepository.GetMessagesByDateRange(range.startDate, range.endDate);
+            var result = await _messagesRepository.GetMessagesByDateRange(range);
 
             if (result == null)
             {

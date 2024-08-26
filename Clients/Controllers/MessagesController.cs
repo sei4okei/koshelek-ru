@@ -44,6 +44,20 @@ namespace Clients.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MessageDateRange()
+        {
+            var range = new DateRange()
+            {
+                endDate = DateTime.Now,
+                startDate = DateTime.Now.AddMinutes(-10)
+            };
+
+            var messages = await _messagesService.GetMessagesByDateRange(range);
+            return View(messages);
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

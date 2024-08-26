@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Clients.BLL.Models
+namespace Clients.DAL.Model
 {
     public class DateRange
     {

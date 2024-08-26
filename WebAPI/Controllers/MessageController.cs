@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             return Ok("Message added successfully.");
         }
 
-        [HttpGet("range")]
+        [HttpPost("range")]
         public ActionResult<List<Message>> GetMessagesByDateRange([FromBody] DateRange dateRange)
         {
             var messages = _messageRepository.GetMessagesByDateRange(dateRange.startDate, dateRange.endDate);

@@ -1,4 +1,5 @@
 ﻿using Clients.BLL.Models;
+using Clients.DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
